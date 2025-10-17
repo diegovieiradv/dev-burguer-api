@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "node --watch src/server.js"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
