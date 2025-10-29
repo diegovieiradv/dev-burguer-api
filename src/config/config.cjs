@@ -5,12 +5,13 @@ module.exports = {
     port: 5433,
     username: 'admin',
     password: '123456',
-    database: 'dev-burger-db',
+    database: 'dev-burger-dev',
     define: {
       timestamps: true,
       underscored: true,
       underscoredAll: true,
     },
+    logging: false,
   },
 
   test: {
@@ -25,6 +26,7 @@ module.exports = {
       underscored: true,
       underscoredAll: true,
     },
+    logging: false,
   },
 
   production: {
@@ -39,5 +41,6 @@ module.exports = {
       underscored: true,
       underscoredAll: true,
     },
+    logging: false,
   },
 };
