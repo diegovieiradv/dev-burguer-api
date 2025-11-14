@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import * as Yup from 'yup';
+import bcrypt from 'bcryptjs';
 
 class UserController {
   async store(request, response) {
@@ -11,20 +12,23 @@ class UserController {
           'O nome deve conter apenas letras e espaços',
         ),
       email: Yup.string().email().required(),
-      password_hash: Yup.string().required().min(6),
+      password: Yup.string().required().min(6),
       admin: Yup.boolean(),
     });
 
     try {
       schema.validateSync(request.body, { abortEarly: false, strict: true });
 
-      const { name, email, password_hash, admin } = request.body;
+      const { name, email, password, admin } = request.body;
 
+      
+       
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
         return response.status(400).json({ error: 'Usuário já existe' });
       }
-
+      
+      const password_hash = await bcrypt.hash(password, 8);
       const user = await User.create({ name, email, password_hash, admin });
 
       return response.status(201).json({
