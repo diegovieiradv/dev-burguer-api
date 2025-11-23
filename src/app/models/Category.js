@@ -1,14 +1,18 @@
 import Sequelize, { Model } from "sequelize";
 
 class Category extends Model {
-  static init(sequelize, DataTypes) {
+  static init(sequelize) {
     super.init(
-      {
-        name: Sequelize.STRING,
-   
-      },
+      { name: Sequelize.STRING },
       { sequelize, tableName: "categories" }
     );
+  }
+
+  static associate(models) {
+    this.hasMany(models.Product, {
+      foreignKey: "category_id",
+      as: "products",
+    });
   }
 }
 

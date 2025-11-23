@@ -4,7 +4,7 @@ import User from '../app/models/User.js';
 import Product from '../app/models/Product.js';
 import Category from '../app/models/Category.js';
 
-const models = [User, Product, Category];
+const models = [User, Category, Product]; // <- Category antes de Product
 
 class Database {
   constructor() {
@@ -12,24 +12,25 @@ class Database {
   }
 
   init() {
-    // Seleciona o ambiente
     const environment = process.env.NODE_ENV || 'development';
     const config = databaseConfig[environment];
 
-    // Conecta com o banco, desliga logs detalhados
-    this.connection = new Sequelize({
-      ...config,
-      logging: false, // <- desliga logs SQL
-    });
+    this.connection = new Sequelize({ ...config, logging: false });
 
-    // Inicializa os models
-    models.map((model) => model.init(this.connection));
+    // Inicializa models
+    models
+      .map(model => model.init(this.connection))
+      .map(model => {
+        if (model && typeof model.associate === 'function') {
+          model.associate(this.connection.models);
+        }
+        return model;
+      });
 
-    // Sincroniza as tabelas sem apagar dados
     this.connection
       .sync({ alter: true })
-      .then(() => console.log('Tabelas sincronizadas com sucesso!'))
-      .catch((err) => console.error('Erro ao sincronizar tabelas:', err));
+      .then(() => console.log('Tabelas sincronizadas!'))
+      .catch(err => console.error('Erro ao sincronizar tabelas:', err));
   }
 }
 

@@ -1,13 +1,13 @@
 import Sequelize, { Model } from "sequelize";
 
 class Product extends Model {
-  static init(sequelize, DataTypes) {
+  static init(sequelize) {
     super.init(
       {
         name: Sequelize.STRING,
-        category: Sequelize.STRING,
         price: Sequelize.INTEGER,
         path: Sequelize.STRING,
+        category_id: Sequelize.INTEGER, // <- precisa estar aqui
         url: {
           type: Sequelize.VIRTUAL,
           get() {
@@ -17,6 +17,13 @@ class Product extends Model {
       },
       { sequelize, tableName: "products" }
     );
+  }
+
+  static associate(models) {
+    this.belongsTo(models.Category, {
+      foreignKey: "category_id",
+      as: "category", // <- bate com include
+    });
   }
 }
 
