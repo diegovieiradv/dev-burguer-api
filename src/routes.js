@@ -7,7 +7,7 @@ import multer from 'multer';
 import multerConfig from './config/multer.cjs';
 import authMiddleware from './middlewares/auth.js';
 import CategoryController from './app/controllers/CategoryController.js';
-
+import adminMiddleware from './middlewares/admin.js';
 
 const routes = new Router();
 
@@ -19,10 +19,15 @@ routes.post('/session', SessionController.store);
 
 // CORRETO: 'file' é o nome do campo no Insomnia
 routes.use(authMiddleware);
-routes.post('/products', uploads.single('file'), ProductController.store);
-routes.get('/products', ProductController.index )
+routes.post(
+  '/products',
+  adminMiddleware,
+  uploads.single('file'),
+  ProductController.store,
+);
+routes.get('/products', ProductController.index);
 
-routes.post('/categories', CategoryController.store);
-routes.get('/categories', CategoryController.index )
+routes.post('/categories', adminMiddleware, CategoryController.store);
+routes.get('/categories', CategoryController.index);
 
 export default routes;

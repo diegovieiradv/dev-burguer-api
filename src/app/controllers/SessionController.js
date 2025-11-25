@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as Yup from 'yup';
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -14,7 +14,7 @@ class SessionController {
     const isValid = await schema.isValid(request.body, { strict: true });
 
     if (!isValid) {
-      return response.status(400).json({ error: "Falha na validação" });
+      return response.status(400).json({ error: 'Falha na validação' });
     }
 
     const { email, password } = request.body;
@@ -22,30 +22,32 @@ class SessionController {
 
     // Se não existe, retorna erro
     if (!existingUser) {
-      return response.status(400).json({ error: "Usuário não existe" });
+      return response.status(400).json({ error: 'Usuário não existe' });
     }
 
     // Verifica senha
-    const isPasswordCorrect = await bcrypt.compare(password, existingUser.password_hash);
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      existingUser.password_hash,
+    );
 
     if (!isPasswordCorrect) {
-      return response.status(400).json({ error: "Senha incorreta" });
+      return response.status(400).json({ error: 'Senha incorreta' });
     }
- 
-  const token = jwt.sign(
-      { id: existingUser.id },
+
+    const token = jwt.sign(
+      { id: existingUser.id, admin: existingUser.admin },
       authConfig.secret,
-      { expiresIn: authConfig.expiresIn }
-  )
+      { expiresIn: authConfig.expiresIn },
+    );
     // Tudo certo, cria sessão
-    return response.status(200).json({ 
-        id: existingUser.id,
-        name: existingUser.name,
-        email: existingUser.email,
-        admin: existingUser.admin,
-        token,
+    return response.status(200).json({
+      id: existingUser.id,
+      name: existingUser.name,
+      email: existingUser.email,
+      admin: existingUser.admin,
+      token,
     });
-    
   }
 }
 

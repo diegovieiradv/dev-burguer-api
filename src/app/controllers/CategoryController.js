@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as Yup from 'yup';
 import Category from '../models/Category.js';
 
 class CategoryController {
@@ -10,21 +10,22 @@ class CategoryController {
     try {
       schema.validateSync(data, { abortEarly: false });
     } catch (err) {
-      if (err.name === "ValidationError") {
+      if (err.name === 'ValidationError') {
         return response
           .status(400)
-          .json({ error: "Falha na validação", messages: err.errors });
+          .json({ error: 'Falha na validação', messages: err.errors });
       }
     }
 
     // Pega dados
+
     const { name } = request.body;
 
     const existingCategory = await Category.findOne({ where: { name } });
 
     // Se já existe, retorna erro
     if (existingCategory) {
-      return response.status(400).json({ error: "Categoria já existe" });
+      return response.status(400).json({ error: 'Categoria já existe' });
     }
 
     // Se tiver arquivo
@@ -40,11 +41,11 @@ class CategoryController {
 
     return response.status(201).json(newCategory);
   }
-   async index(request, response){
-    const categories = await Category.findAll()
+  async index(request, response) {
+    const categories = await Category.findAll();
 
-    return response.status(200).json(categories)
-    }
+    return response.status(200).json(categories);
+  }
 }
 
 export default new CategoryController();

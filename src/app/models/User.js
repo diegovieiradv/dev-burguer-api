@@ -5,11 +5,11 @@ class User extends Model {
     super.init(
       {
         id: {
-          type: DataTypes.INTEGER,
-          autoIncrement: true,
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },
-        name: DataTypes.STRING,
+        ame: DataTypes.STRING,
         email: DataTypes.STRING,
         password_hash: DataTypes.STRING,
         admin: DataTypes.BOOLEAN,

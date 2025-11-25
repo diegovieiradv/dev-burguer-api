@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as Yup from 'yup';
 import Product from '../models/Product.js';
 import Category from '../models/Category.js';
 
@@ -6,7 +6,7 @@ class ProductController {
   async store(request, response) {
     const schema = Yup.object({
       name: Yup.string().required(),
-      category_id: Yup.string().required(),
+      category_id: Yup.number().required(),
       price: Yup.number().required().positive(),
     });
 
@@ -18,10 +18,10 @@ class ProductController {
     try {
       schema.validateSync(data, { abortEarly: false });
     } catch (err) {
-      if (err.name === "ValidationError") {
+      if (err.name === 'ValidationError') {
         return response
           .status(400)
-          .json({ error: "Falha na validação", messages: err.errors });
+          .json({ error: 'Falha na validação', messages: err.errors });
       }
     }
 
