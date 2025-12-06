@@ -9,18 +9,16 @@ const authMiddleware = (request, response, next) => {
   const token = authToken.split(' ')[1];
 
   try {
-    jwt.verify(token, authConfig.secret, (error, decoded) => {
-      if (error) {
-        throw Error();
-      }
+    const decoded = jwt.verify(token, authConfig.secret);
 
-      request.userId = decoded.id;
-      request.userIdIsAdmin = decoded.admin;
-    });
+    request.userId = decoded.id;
+    request.userName = decoded.name;
+    request.userIdIsAdmin = decoded.admin;
+
+    return next();
   } catch (error) {
     return response.status(401).json({ error: 'Token inválido' });
   }
-  return next();
 };
 
 export default authMiddleware;

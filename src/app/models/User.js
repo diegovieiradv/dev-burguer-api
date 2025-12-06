@@ -9,7 +9,7 @@ class User extends Model {
           defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
         },
-        ame: DataTypes.STRING,
+        name: DataTypes.STRING, // <- corrigido
         email: DataTypes.STRING,
         password_hash: DataTypes.STRING,
         admin: DataTypes.BOOLEAN,
@@ -19,6 +19,8 @@ class User extends Model {
         tableName: 'users',
       },
     );
+
+    return this; // <- obrigatório
   }
 }
 

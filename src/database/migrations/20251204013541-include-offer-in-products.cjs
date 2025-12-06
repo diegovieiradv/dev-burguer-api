@@ -6,7 +6,7 @@ module.exports = {
     await queryInterface.addColumn('products', 'offer', {
       type: Sequelize.BOOLEAN,
       defaultValue: false,
-      allowNull: true,
+      allowNull: false,
     });
   },
 

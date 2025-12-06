@@ -3,8 +3,12 @@ import routes from './routes.js';
 import fileRouteConfig from './config/fileroutes.cjs';
 
 const app = express();
+
 app.use(express.json());
-app.use(routes);
+app.use(express.urlencoded({ extended: true }));
+app.use('/category-file', fileRouteConfig);
 app.use('/product-file', fileRouteConfig);
+
+app.use(routes);
 
 export default app;

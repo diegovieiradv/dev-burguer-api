@@ -1,4 +1,4 @@
-import Sequelize, { Model } from "sequelize";
+import Sequelize, { Model } from 'sequelize';
 
 class Product extends Model {
   static init(sequelize) {
@@ -7,7 +7,8 @@ class Product extends Model {
         name: Sequelize.STRING,
         price: Sequelize.INTEGER,
         path: Sequelize.STRING,
-        category_id: Sequelize.INTEGER, // <- precisa estar aqui
+        offer: Sequelize.BOOLEAN,
+        category_id: Sequelize.INTEGER,
         url: {
           type: Sequelize.VIRTUAL,
           get() {
@@ -15,14 +16,16 @@ class Product extends Model {
           },
         },
       },
-      { sequelize, tableName: "products" }
+      { sequelize, tableName: 'products' },
     );
+
+    return this; // <- obrigatório
   }
 
   static associate(models) {
     this.belongsTo(models.Category, {
-      foreignKey: "category_id",
-      as: "category", // <- bate com include
+      foreignKey: 'category_id',
+      as: 'category',
     });
   }
 }
